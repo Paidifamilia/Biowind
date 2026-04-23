@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madeira - Compras e Vendas | BioWind</title>
+    <!-- Importação de Ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="wood-page">
+
+    <!-- Cabeçalho / NavBar -->
+    <header class="navbar">
+        <div class="brand">
+            <h1>BioWind</h1>
+            <span>Logística de Resíduos</span>
+        </div>
+        <div class="nav-actions">
+            <a href="pay.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro" style="color: #c89116; font-size: 32px; text-decoration: none; display: flex; align-items: center;">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="marketplace-container">
+        <!-- Sidebar de Filtros -->
+        <aside class="filters-sidebar">
+            <h3>Filtros</h3>
+            
+            <div class="filter-group">
+                <h4>Tipo de Papel</h4>
+                <label><input type="checkbox"> Papel Couché</label>
+                <label><input type="checkbox"> Papel Offset</label>
+                <label><input type="checkbox"> PapelKraft</label>
+                <label><input type="checkbox"> Papel Cartão</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Preço</h4>
+                <div class="price-range">
+                    <input type="number" placeholder="Mín">
+                    <span>-</span>
+                    <input type="number" placeholder="Máx">
+                </div>
+            </div>
+            
+            <button class="btn-filter">Aplicar Filtros</button>
+        </aside>
+
+        <!-- Área principal de listagem (Estilo OLX / Shopee) -->
+        <section class="products-section">
+            
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar-container">
+                <input type="text" class="search-input" placeholder="Buscar por papéis...">
+                <button class="btn-search"><i class="fas fa-search"></i></button>
+            </div>
+
+            <!-- Grid de Produtos -->
+            <div class="products-grid">
+                
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-tree"></i> <!-- Espaço reservado para a foto real -->
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 15,00 <span>/ un</span></h3>
+                        <p class="product-title">Papel Usado em Bom Estado</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-cubes"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 120,00 <span>/ lote</span></h3>
+                        <p class="product-title">Lote de Papelão</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Campinas, SP</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 50,00 <span>/ tonelada</span></h3>
+                        <p class="product-title">Papel Offset</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+                 <!-- Produto 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 30,00 <span>/ m³</span></h3>
+                        <p class="product-title">Papel Offset em Bom Estado</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+                <!-- Produto 5 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-pallet"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 8,00 <span>/ un</span></h3>
+                        <p class="product-title">Papelão</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+                 <!-- Produto 6 -->
+                 <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ 200,00 <span>/ m³</span></h3>
+                        <p class="product-title">Papel Kraft</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Porto Alegre, RS</span>
+                        <button class="btn-buy">Negociar</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

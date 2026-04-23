@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioWind - Logística de Resíduos</title>
+    <!-- Importação de Ícones (FontAwesome) para as logos de cada bloco -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho / Menu Navegador Fixo -->
+    <header class="navbar">
+        <div class="brand">
+            <h1>BioWind</h1>
+            <span>Logística de Resíduos</span>
+        </div>
+        <div class="profile-area">
+            <!-- Botão que cai para a tela de cadastro, com a logo de perfil sem cadastro -->
+            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Antes de cair na tela principal (Slider), inicializa nesta tela com 4 blocos -->
+        <section class="hero-initial">
+            <div class="hero-texts">
+                <h2>Encontre o seu Parceiro de Residuos</h2>
+                <p>Faça Bem para uma Causa Melhor</p>
+            </div>
+
+            <!-- Container com 4 Blocos -->
+            <div class="options-container">
+                <!-- Bloco 1 -->
+                <a href="adv.html" class="option-card">
+                    <i class="fas fa-bullhorn card-logo"></i>
+                    <h3>Anuncie aqui seus materiais</h3>
+                </a>
+                <!-- Bloco 2 -->
+                <a href="pay.html" class="option-card">
+                    <i class="fas fa-shopping-bag card-logo"></i>
+                    <h3>Compra de Resíduos</h3>
+                </a>
+                <!-- Bloco 3 -->
+                <a href="about.html" class="option-card">
+                    <i class="fas fa-info-circle card-logo"></i>
+                    <h3>Saiba Mais</h3>
+                </a>
+                <!-- Bloco 4 -->
+                <a href="contact.html" class="option-card">
+                    <i class="fas fa-comments card-logo"></i>
+                    <h3>Fale Conosco</h3>
+                </a>
+            </div>
+        </section>
+    </main>
+    <!-- Sem Rodapé conforme solicitado -->
+
+    <script>
+        // Logica para o Slider com seta apontada para direita
+        const track = document.getElementById('sliderTrack');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide++;
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0; // Volta ao início
+            }
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        });
+    </script>
+</body>
+</html>

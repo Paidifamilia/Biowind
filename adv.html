@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuncie Aqui | BioWind</title>
+    <!-- Importação de Ícones (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fontes do Projeto -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="announce-page">
+
+    <!-- Cabeçalho / NavBar -->
+    <header class="navbar">
+        <div class="brand">
+            <h1>BioWind</h1>
+            <span>Logística de Resíduos</span>
+        </div>
+        <div class="nav-actions">
+            <!-- Botão para voltar ao início -->
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Voltar ao início
+            </a>
+            <!-- Botão de perfil -->
+            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro" style="color: #c89116; font-size: 32px; text-decoration: none; display: flex; align-items: center;">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="announce-main">
+        <h1 class="announce-title">ANUNCIE AQUI</h1>
+        
+        <form class="announce-form">
+            <!-- Campo de check solicitado (Tipo de Material) -->
+            <div class="material-type-group">
+                <label class="check-pill"><input type="radio" name="materialType" value="madeira" required> Madeira</label>
+                <label class="check-pill"><input type="radio" name="materialType" value="papel"> Papel Incolor</label>
+                <label class="check-pill"><input type="radio" name="materialType" value="organico"> Lixo Orgânico</label>
+            </div>
+
+            <!-- Nome do Produto -->
+            <div class="input-container full-width">
+                <input type="text" class="input-pill" placeholder="NOME DO PRODUTO">
+            </div>
+
+            <!-- Container das imagens e detalhes -->
+            <div class="announce-details-container">
+                
+                <!-- Upload de Imagens -->
+                <div class="image-upload-row">
+                    <div class="upload-box">
+                        <i class="fas fa-camera"></i>
+                        <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                    </div>
+                    <div class="upload-box">
+                        <i class="fas fa-camera"></i>
+                        <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                    </div>
+                    <div class="upload-box">
+                        <i class="fas fa-camera"></i>
+                        <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                    </div>
+                </div>
+
+                <!-- Duas colunas para os campos -->
+                <div class="details-grid">
+                    <div class="details-left">
+                        <input type="text" class="input-pill" placeholder="QUANTIDADE / UNIDADE">
+                        <input type="text" class="input-pill" placeholder="PREÇO / UNIDADE">
+                    </div>
+                    <div class="details-right">
+                        <input type="text" class="input-pill" placeholder="FREQUÊNCIA DE GERAÇÃO">
+                        <input type="text" class="input-pill" placeholder="NÍVEL DE UMIDADE">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rodapé do formulário -->
+            <div class="form-footer">
+                <input type="text" class="input-pill cep-input" placeholder="CEP">
+                <button type="button" class="btn-avancar">AVANÇAR</button>
+            </div>
+        </form>
+    </main>
+
+</body>
+</html>

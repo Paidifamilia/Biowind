@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - BioWind</title>
+    <!-- FontAwesome e Style Global -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="register-body">
+
+    <!-- Cabeçalho idêntico (NavBar sem Links ao Lado Direito Exatamente Feito) -->
+    <header class="navbar register-navbar">
+        <a href="index.html" class="brand" style="text-decoration: none;">
+            <h1>BioWind</h1>
+            <span>Logística de Resíduos</span>
+        </a>
+    </header>
+
+    <main class="main-cadastro">
+        <div class="form-wrapper">
+            <h2 class="form-title">CADASTRO</h2>
+            <form id="registroForm" action="#" method="get">
+                
+                <!-- Nome Completo (100% largura) -->
+                <div class="form-row">
+                    <div class="input-pill w-100">
+                        <input type="text" placeholder="NOME COMPLETO" required>
+                    </div>
+                </div>
+
+                <!-- CNPJ e Nome Empresa -->
+                <div class="form-row">
+                    <div class="input-pill w-40">
+                        <input type="text" placeholder="CNPJ" required>
+                    </div>
+                    <div class="input-pill w-60">
+                        <input type="text" placeholder="NOME DA EMPRESA" required>
+                    </div>
+                </div>
+
+                <!-- Telefone e Email Corporativo -->
+                <div class="form-row">
+                    <div class="input-pill w-40">
+                        <input type="tel" placeholder="TELEFONE" required>
+                    </div>
+                    <div class="input-pill w-60">
+                        <input type="email" placeholder="E-MAIL CORPORATIVO" required>
+                    </div>
+                </div>
+
+                <!-- Controle do Vendedor/Comprador Exatamente numa pílula -->
+                <div class="form-row">
+                    <div class="input-pill w-50">
+                        <div class="toggle-group">
+                            <span style="margin-right: 5px;">TIPO DE ATUAÇÃO: </span>
+                            <label>
+                                <input type="radio" name="tipo" value="vendedor" id="optVendedor">
+                                <span>VENDEDOR</span>
+                            </label>
+                            <span class="separator">/</span>
+                            <label>
+                                <input type="radio" name="tipo" value="comprador" id="optComprador" checked>
+                                <span>COMPRADOR</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expansão Animada de Vendedor -->
+                <div class="vendedor-block" id="blocoVendedor">
+                    <h2 class="vendedor-title">VENDEDOR</h2>
+                    <div class="form-row">
+                        <div class="input-pill w-100">
+                            <input type="text" placeholder="INSCRIÇÃO ESTADUAL">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-pill w-100">
+                            <input type="text" placeholder="SETOR DE ATIVIDADE">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-pill w-100">
+                            <input type="text" placeholder="RESPONSAVEL TECNICO">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Concluir com cápsula escura estilo Imagem -->
+                <div class="action-row">
+                    <button type="button" class="btn-submit" onclick="window.location.href='index.html'">CONCLUIR</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Script focado somente em ativar a transição suave -->
+    <script>
+        const radioVendedor = document.getElementById('optVendedor');
+        const radioComprador = document.getElementById('optComprador');
+        const blocoVendedor = document.getElementById('blocoVendedor');
+
+        function toggleAnimation() {
+            if (radioVendedor.checked) {
+                blocoVendedor.classList.add('active');
+                // Defino uma altura maior dinamicamente para comportar o expansivo fludar devagar e nunca cortar 
+                blocoVendedor.style.maxHeight = blocoVendedor.scrollHeight + 80 + "px"; 
+            } else {
+                blocoVendedor.classList.remove('active');
+                blocoVendedor.style.maxHeight = "0";
+            }
+        }
+
+        radioVendedor.addEventListener('change', toggleAnimation);
+        radioComprador.addEventListener('change', toggleAnimation);
+
+        // Executar uma vez pra garantir os estados dos botões no Reset da página
+        document.addEventListener('DOMContentLoaded', toggleAnimation);
+    </script>
+</body>
+</html>
