@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BioWind</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-page">
+    <header class="navbar">
+        <div class="nav-left" style="display: flex; align-items: center; gap: 30px;">
+            <div class="brand">
+                <h1>Login</h1>
+            </div>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Voltar</a>
+        </div>
+        <div class="nav-right">
+            <i class="fas fa-user-circle profile-btn" style="color: white; font-size: 2.5rem;"></i>
+        </div>
+    </header>
+
+    <main class="login-main">
+        <!-- TELA 1: Form de Login -->
+        <div id="login-screen-1" class="login-card active">
+            <h2 class="login-title">EM QUAL PERFIL VAI LOGAR?</h2>
+            
+            <div class="login-input-pill toggle-group">
+                <label>
+                    <input type="radio" name="perfil" value="comprador" checked>
+                    <span>°COMPRADOR</span>
+                </label>
+                <span class="separator">/</span>
+                <label>
+                    <input type="radio" name="perfil" value="vendedor">
+                    <span>°VENDEDOR</span>
+                </label>
+            </div>
+
+            <div class="login-field">
+                <label class="field-label">E-MAIL</label>
+                <div class="login-input-pill">
+                    <input type="email" name="email" placeholder="Digite seu e-mail" required>
+                </div>
+            </div>
+
+            <div class="login-field">
+                <label class="field-label">SENHA</label>
+                <div class="login-input-pill">
+                    <input type="password" name="senha" placeholder="Digite sua senha" required>
+                </div>
+            </div>
+
+            <a href="#" class="forgot-password">ESQUECEU SUA SENHA ?</a>
+
+            <div class="action-buttons">
+                <a href="register.html" class="btn-cadastrar">CADASTRAR</a>
+                <button type="button" class="btn-entrar" onclick="showSuccess()">ENTRAR</button>
+            </div>
+        </div>
+
+        <!-- TELA 2: Sucesso -->
+        <div id="login-screen-2" class="login-card success-card" style="display: none;">
+            <div class="success-content">
+                <i class="fas fa-thumbs-up thumbs-icon"></i>
+                <h2 class="success-text">LOGIN FEITO COM</h2>
+                <h2 class="success-highlight">SUCESSO!</h2>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showSuccess() {
+            // Oculta tela 1
+            const screen1 = document.getElementById('login-screen-1');
+            screen1.style.display = 'none';
+            screen1.classList.remove('active');
+            
+            // Mostra tela 2
+            const screen2 = document.getElementById('login-screen-2');
+            screen2.style.display = 'flex';
+            screen2.classList.add('active');
+            
+            // Redireciona após 2 segundos
+            setTimeout(() => {
+                window.location.href = 'Index.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
