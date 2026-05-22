@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madeira - Compras e Vendas | BioWind</title>
+    <title>Orgânico - Compras e Vendas | BioWind</title>
     <!-- Importação de Ícones (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -20,7 +20,11 @@
             <a href="pay.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Voltar
             </a>
-            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro" style="color: #c89116; font-size: 32px; text-decoration: none; display: flex; align-items: center;">
+            <a href="historic.html" class="cart-btn" aria-label="Carrinho">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-counter" id="cart-counter" style="display: none;">0</span>
+            </a>
+            <a href="login.html" class="profile-btn" aria-label="Acessar Cadastro">
                 <i class="fas fa-user-circle"></i>
             </a>
         </div>
@@ -61,89 +65,90 @@
             </div>
 
             <!-- Grid de Produtos -->
-            <div class="products-grid">
-                
-                <!-- Produto 1 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-tree"></i> <!-- Espaço reservado para a foto real -->
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 15,00 <span>/ un</span></h3>
-                        <p class="product-title">Restos de comida</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> São Paulo, SP</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-                <!-- Produto 2 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-cubes"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 120,00 <span>/ lote</span></h3>
-                        <p class="product-title">Cascas e sementes</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Campinas, SP</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-                <!-- Produto 3 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 50,00 <span>/ tonelada</span></h3>
-                        <p class="product-title">Borra de café</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Curitiba, PR</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-                 <!-- Produto 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-fire"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 30,00 <span>/ m³</span></h3>
-                        <p class="product-title">Restos de jardim</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-                <!-- Produto 5 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-pallet"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 8,00 <span>/ un</span></h3>
-                        <p class="product-title">Pedaços de madeira</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, RJ</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-                 <!-- Produto 6 -->
-                 <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-hammer"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-price">R$ 200,00 <span>/ m³</span></h3>
-                        <p class="product-title">Restos de Orgânicos</p>
-                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> Porto Alegre, RS</span>
-                        <button class="btn-buy">Negociar</button>
-                    </div>
-                </div>
-
-            </div>
+            <div class="products-grid"></div>
         </section>
     </main>
 
+    <script>
+        //Função para excluir anuncio do card e do localStorage
+        function excluirAnuncio(id, btnElement) {
+            if(confirm("Tem certeza que deseja excluir este anúncio?")) { // Confirma a exclusão do anuncio
+                let ads = JSON.parse(localStorage.getItem('biowind_ads')) || []; // Pega os anuncios do localStorage
+                ads = ads.filter(ad => ad.id !== id); // Filtra os anuncios e remove o anuncio com o id informado
+                localStorage.setItem('biowind_ads', JSON.stringify(ads)); // Salva os anuncios no localStorage
+                
+                const card = btnElement.closest('.product-card'); // Remove o card do produto
+                if(card) { // Se o card existir
+                    card.remove(); // Remove o card do produto do DOM
+                }
+            }
+        }
+
+        //Função para atualizar o contador do carrinho
+        function atualizarContadorCarrinho() { 
+            const cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Pega os itens do carrinho do localStorage
+            let total = 0; // Inicializa o total
+            cart.forEach(item => total += item.quantidade); // Soma a quantidade de cada item
+            const counter = document.getElementById('cart-counter'); // Pega o contador do carrinho
+            if(counter) { // Se o contador existir
+                if(total > 0) { // Se o total for maior que 0
+                    counter.innerText = total; // Atualiza o contador do carrinho
+                    counter.style.display = 'block'; // Mostra o contador
+                } else { // Se o total for menor que 0
+                    counter.style.display = 'none'; // Esconde o contador
+                }
+            }
+        }
+
+        //Função para adicionar item ao carrinho
+        function adicionarAoCarrinho(id) {
+            const ads = JSON.parse(localStorage.getItem('biowind_ads')) || []; // Pega os anuncios do localStorage
+            const ad = ads.find(a => a.id === id); // Encontra o anuncio com o id informado
+            if(ad) { // Se o anuncio existir
+                let cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Pega os itens do carrinho do localStorage
+                let itemCart = cart.find(item => item.id === id); // Encontra o item com o id informado
+                if(itemCart) { // Se o item existir
+                    itemCart.quantidade += 1; // Adiciona 1 ao item
+                } else { // Se o item não existir
+                    cart.push({...ad, quantidade: 1}); // Adiciona o item ao carrinho
+                }
+                localStorage.setItem('biowind_cart', JSON.stringify(cart)); // Salva os itens do carrinho no localStorage
+                atualizarContadorCarrinho(); // Atualiza o contador do carrinho
+                alert("Compra adicionada ao carrinho!"); // Mostra um alerta de sucesso
+            }
+        }
+
+        // Função quando o DOM é carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            atualizarContadorCarrinho(); // Atualiza o contador do carrinho
+            const ads = JSON.parse(localStorage.getItem('biowind_ads')) || []; // Pega os anuncios do localStorage
+            const productsGrid = document.querySelector('.products-grid'); // Seleciona a área de grade de produtos
+            
+            const categoryAds = ads.filter(ad => ad.materialType === 'organico'); // Filtra os anúncios por categoria
+            
+            categoryAds.reverse().forEach(ad => { // Inverte a ordem dos anúncios e percorre cada um
+                const productCard = document.createElement('div'); // Cria um card de produto
+                productCard.className = 'product-card'; // Define o nome da classe do card
+                productCard.style.position = 'relative'; // Define a posição do card
+                
+                // Cria o card de produto
+                productCard.innerHTML = `
+                    <button onclick="excluirAnuncio(${ad.id}, this)" style="position: absolute; top: 10px; right: 10px; background: rgba(220, 53, 69, 0.9); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background 0.3s;" onmouseover="this.style.background='rgba(220, 53, 69, 1)'" onmouseout="this.style.background='rgba(220, 53, 69, 0.9)'" title="Excluir Anúncio">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <div class="product-image" style="overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0;">
+                        <img src="${ad.imagem}" alt="${ad.nome}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-price">R$ ${ad.preco},00 <span>/ un</span></h3>
+                        <p class="product-title">${ad.nome}</p>
+                        <span class="product-location"><i class="fas fa-map-marker-alt"></i> CEP: ${ad.cep}</span>
+                        <button class="btn-buy" onclick="adicionarAoCarrinho(${ad.id})">Comprar</button>
+                    </div>
+                `;
+                productsGrid.insertBefore(productCard, productsGrid.firstChild); // Insere o card de produto na grade
+            });
+        });
+    </script>
 </body>
 </html>
