@@ -1,31 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anuncie Aqui | BioWind</title>
-    <!-- Importação de Ícones (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fontes do Projeto -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .error-message {
+            color: #d10000;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            display: block;
+        }
+        .announce-form .cep-input {
+            max-width: 220px;
+        }
+        .price-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .price-input-wrapper .currency-prefix {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: 600;
+            pointer-events: none;
+        }
+        .price-input-wrapper .input-pill {
+            padding-left: 45px;
+        }
+        .quantity-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .quantity-input-wrapper .quantity-prefix {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: 600;
+            pointer-events: none;
+        }
+        .quantity-input-wrapper .input-pill {
+            padding-left: 45px;
+        }
+    </style>
 </head>
+
 <body class="announce-page">
 
-    <!-- Cabeçalho / NavBar -->
     <header class="navbar">
         <div class="brand">
             <h1>BioWind</h1>
             <span>Logística de Resíduos</span>
         </div>
         <div class="nav-actions">
-            <!-- Botão para voltar ao início -->
             <a href="index.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Voltar ao início
             </a>
-            <!-- Botão de perfil -->
-            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro" style="color: #c89116; font-size: 32px; text-decoration: none; display: flex; align-items: center;">
+            <a href="historic.html" class="cart-btn" aria-label="Carrinho">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-counter" id="cart-counter" style="display: none;">0</span>
+            </a>
+            <span id="header-user-name" class="profile-name" style="display:none;"></span>
+            <a href="login.html" class="profile-btn" aria-label="Acessar Cadastro">
                 <i class="fas fa-user-circle"></i>
             </a>
         </div>
@@ -33,59 +77,287 @@
 
     <main class="announce-main">
         <h1 class="announce-title">ANUNCIE AQUI</h1>
-        
+        <!-- Formulário de anuncio -->
         <form class="announce-form">
-            <!-- Campo de check solicitado (Tipo de Material) -->
+            <!-- Tipo de material -->
             <div class="material-type-group">
-                <label class="check-pill"><input type="radio" name="materialType" value="madeira" required> Madeira</label>
+                <label class="check-pill"><input type="radio" name="materialType" value="madeira" required>Madeira</label>
                 <label class="check-pill"><input type="radio" name="materialType" value="papel"> Papel Incolor</label>
-                <label class="check-pill"><input type="radio" name="materialType" value="organico"> Lixo Orgânico</label>
+                <label class="check-pill"><input type="radio" name="materialType" value="organico"> Lixo
+                    Orgânico</label>
             </div>
 
-            <!-- Nome do Produto -->
             <div class="input-container full-width">
-                <input type="text" class="input-pill" placeholder="NOME DO PRODUTO">
+                <input type="text" id="produto-nome" class="input-pill" placeholder="NOME DO PRODUTO" maxlength="200" required>
             </div>
 
-            <!-- Container das imagens e detalhes -->
             <div class="announce-details-container">
-                
                 <!-- Upload de Imagens -->
                 <div class="image-upload-row">
-                    <div class="upload-box">
+                    <!-- Box 1 -->
+                    <div class="upload-box" onclick="triggerInput(this)">
                         <i class="fas fa-camera"></i>
                         <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                        <input type="file" accept="image/*" class="file-input" style="display: none;"
+                            onchange="previewImage(this)">
                     </div>
-                    <div class="upload-box">
+                    <!-- Box 2 -->
+                    <div class="upload-box" onclick="triggerInput(this)">
                         <i class="fas fa-camera"></i>
                         <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                        <input type="file" accept="image/*" class="file-input" style="display: none;"
+                            onchange="previewImage(this)">
                     </div>
-                    <div class="upload-box">
+                    <!-- Box 3 -->
+                    <div class="upload-box" onclick="triggerInput(this)">
                         <i class="fas fa-camera"></i>
                         <div class="plus-icon"><i class="fas fa-plus"></i></div>
+                        <input type="file" accept="image/*" class="file-input" style="display: none;"
+                            onchange="previewImage(this)">
                     </div>
                 </div>
 
-                <!-- Duas colunas para os campos -->
                 <div class="details-grid">
+                    <!-- Informações do produto -->
                     <div class="details-left">
-                        <input type="text" class="input-pill" placeholder="QUANTIDADE / UNIDADE">
-                        <input type="text" class="input-pill" placeholder="PREÇO / UNIDADE">
+                        <!-- Quantidade do produto -->
+                        <div class="quantity-input-wrapper">
+                            <span class="quantity-prefix" style="color: #000;">kg</span>
+                            <input type="text" id="produto-qtd" class="input-pill" value="0.00" placeholder="QUANTIDADE" maxlength="9" oninput="formataQuantidade(this)" style="width: 100%;" required>
+                        </div>
+                        <!-- Preço do produto -->
+                        <div class="price-input-wrapper">
+                            <span class="currency-prefix" style="color: #000;">R$</span>
+                            <input type="text" id="produto-preco" class="input-pill" value="0.00" oninput="formataPreco(this)" style="width: 100%;" required>
+                        </div>
                     </div>
+                    <!-- Características do produto -->
                     <div class="details-right">
-                        <input type="text" class="input-pill" placeholder="FREQUÊNCIA DE GERAÇÃO">
-                        <input type="text" class="input-pill" placeholder="NÍVEL DE UMIDADE">
+                        <!-- Frequência de geração do produto -->
+                        <select id="produto-frequencia" class="input-pill" required style="color: #000;" onchange="this.style.color='#000'">
+                            <option value="" disabled selected>FREQUÊNCIA DE GERAÇÃO</option>
+                            <option value="Contínua">Contínua</option>
+                            <option value="Descontínua">Descontínua</option>
+                            <option value="Eventual">Eventual</option>
+                        </select>
+                        <!-- Nível de umidade do produto -->
+                        <select id="produto-umidade" class="input-pill" required style="color: #000;" onchange="this.style.color='#000'">
+                            <option value="" disabled selected>NÍVEL DE UMIDADE</option>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                        </select>
                     </div>
                 </div>
             </div>
-
-            <!-- Rodapé do formulário -->
+            <!-- Footer do formulário -->
             <div class="form-footer">
-                <input type="text" class="input-pill cep-input" placeholder="CEP">
-                <button type="button" class="btn-avancar">AVANÇAR</button>
+                <!-- CEP -->
+                <input type="text" id="produto-cep" class="input-pill cep-input" placeholder="CEP" maxlength="9" oninput="formatCep(this)" required>
+                <span class="error-message" id="cep-error"></span>
+                <!-- Botão de avançar -->
+                <button type="button" class="btn-avancar" onclick="validarEPublicar()">AVANÇAR</button>
             </div>
         </form>
     </main>
 
+    <script>
+        let uploadedImages = []; // Array de imagens
+
+        function atualizarContadorCarrinho() { // Atualiza o contador do carrinho
+            const cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Array de carrinho
+            let total = 0; // Total de produtos
+            cart.forEach(item => total += item.quantidade); // Soma a quantidade de produtos
+            const counter = document.getElementById('cart-counter'); // Contador de carrinho
+            if(counter) { // Valida se o contador de carrinho existe
+                if(total > 0) { // Valida se o contador de carrinho é maior que 0
+                    counter.innerText = total; // Define o contador de carrinho como a quantidade de produtos
+                    counter.style.display = 'block'; // Exibe o contador de carrinho
+                } else {
+                    counter.style.display = 'none'; // Oculta o contador de carrinho
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', atualizarContadorCarrinho);
+
+        // Função para validar e publicar o anúncio clicando no botão "AVANÇAR"
+        function validarEPublicar() { // Validação de todos os campos
+            const materialTypeEl = document.querySelector('input[name="materialType"]:checked'); // Retorna o tipo de material selecionado
+            const nome = document.getElementById('produto-nome').value.trim(); // Retorna o nome do produto
+            const qtd = document.getElementById('produto-qtd').value.trim(); // Retorna a quantidade do produto
+            const preco = document.getElementById('produto-preco').value.trim(); // Retorna o preço do produto
+            const freq = document.getElementById('produto-frequencia').value; // Retorna a frequência de geração do produto
+            const umi = document.getElementById('produto-umidade').value; // Retorna o nível de umidade do produto
+            const cep = document.getElementById('produto-cep').value.trim(); // Retorna o CEP do produto
+
+            if (!materialTypeEl || !nome || !qtd || !preco || !freq || !umi || !cep) { // Valida se todos os campos estão preenchidos
+                alert("Por favor, preencha todos os campos."); // Exibe um alerta de sucesso
+                return; // Retorna para a função
+            }
+
+            if (uploadedImages.length === 0) { // Valida se pelo menos uma imagem foi anexada
+                alert("Anexe pelo menos uma imagem"); // Exibe um alerta de sucesso
+                return; // Retorna para a função
+            }
+
+            const materialType = materialTypeEl.value; // Retorna o tipo de material selecionado
+            const cepRawValue = cep.replace(/\D/g, '');
+
+            if (cepRawValue.length !== 8) {
+                setCepError('Digite um CEP válido');
+                return;
+            }
+            setCepError('');
+            
+            // Escolhe uma imagem anexada de forma aleatória
+            const randomImage = uploadedImages[Math.floor(Math.random() * uploadedImages.length)]; // Retorna a imagem selecionada
+
+            const precoRawValue = document.getElementById('produto-preco').dataset.rawValue || '';
+            const precoFormatado = precoRawValue ? formatPrecoValue(precoRawValue) : '';
+
+            const novoAnuncio = { // Cria um novo anúncio no localStorage
+                id: Date.now(), // Data do anúncio
+                materialType: materialType, // Tipo de material
+                nome: nome, // Nome do produto
+                qtd: qtd, // Quantidade do produto
+                preco: precoFormatado, // Preço do produto
+                freq: freq, // Frequência de geração do produto
+                umi: umi, // Nível de umidade do produto
+                cep: cepRawValue, // CEP
+                imagem: randomImage, // Imagem do produto
+                data: new Date().toLocaleDateString() // Data do anúncio
+            };
+
+            let ads = JSON.parse(localStorage.getItem('biowind_ads')) || []; // Array de anúncios
+            ads.push(novoAnuncio); // Adiciona o novo anúncio ao array
+            localStorage.setItem('biowind_ads', JSON.stringify(ads)); // Salva os anúncios no localStorage
+
+            alert("Anunciado com Sucesso!"); // Exibe um alerta de sucesso
+
+            if (materialType === 'madeira') {
+                window.location.href = "wood.html"; // Redireciona para a página de madeira
+            } else if (materialType === 'papel') {
+                window.location.href = "sheet.html"; // Redireciona para a página de papel
+            } else if (materialType === 'organico') {
+                window.location.href = "organizc.html"; // Redireciona para a página de lixo orgânico
+            }
+        }
+
+        function setCepError(message) {
+            const errorEl = document.getElementById('cep-error');
+            if (errorEl) {
+                errorEl.textContent = message;
+            }
+        }
+
+        function formatCep(input) {
+            const raw = input.value.replace(/\D/g, '').slice(0, 8);
+            let formatted = raw;
+            if (raw.length > 5) {
+                formatted = raw.slice(0, 5) + '-' + raw.slice(5);
+            }
+            input.value = formatted;
+            if (raw.length === 8) {
+                setCepError('');
+            }
+        }
+
+        function formataPreco(input) {
+            let digits = input.value.replace(/\D/g, '');
+            digits = digits.slice(0, 8);
+            input.dataset.rawValue = digits;
+
+            if (!digits) {
+                input.value = '0.00';
+                input.dataset.rawValue = '';
+                return;
+            }
+
+            const padded = digits.padStart(3, '0');
+            let integerPart = padded.slice(0, -2).replace(/^0+/, '');
+            const decimalPart = padded.slice(-2);
+            if (integerPart === '') {
+                integerPart = '0';
+            }
+            input.value = `${integerPart}.${decimalPart}`;
+        }
+
+        function formataQuantidade(input) {
+            let digits = input.value.replace(/\D/g, '');
+            digits = digits.slice(0, 8);
+            input.dataset.rawValue = digits;
+
+            if (!digits) {
+                input.value = '0.00';
+                input.dataset.rawValue = '';
+                return;
+            }
+
+            const padded = digits.padStart(3, '0');
+            let integerPart = padded.slice(0, -2).replace(/^0+/, '');
+            const decimalPart = padded.slice(-2);
+            if (integerPart === '') {
+                integerPart = '0';
+            }
+            input.value = `${integerPart}.${decimalPart}`;
+        }
+
+        function formatPrecoValue(rawDigits) {
+            if (!rawDigits) return '';
+            const padded = rawDigits.padStart(3, '0');
+            let integerPart = padded.slice(0, -2).replace(/^0+/, '');
+            const decimalPart = padded.slice(-2);
+            if (integerPart === '') {
+                integerPart = '0';
+            }
+            return `${integerPart}.${decimalPart}`;
+        }
+
+        function triggerInput(element) {
+            element.querySelector('.file-input').click(); // Clica no input de arquivo
+        }
+
+        function previewImage(input) {
+            const box = input.parentElement; // Retorna o pai do input
+            const file = input.files[0]; // Retorna o arquivo selecionado
+
+            if (file) {
+                const reader = new FileReader(); // Cria um leitor de arquivo
+                reader.onload = function (e) { // Quando o arquivo for carregado
+                    const cameraIcon = box.querySelector('.fa-camera'); // Retorna o ícone de câmera
+                    const plusIcon = box.querySelector('.plus-icon'); // Retorna o ícone de mais
+                    if (cameraIcon) cameraIcon.style.opacity = '0'; // Oculta o ícone de câmera
+                    if (plusIcon) plusIcon.style.opacity = '0'; // Oculta o ícone de mais
+
+                    let img = box.querySelector('.preview-img'); // Retorna a imagem
+                    if (!img) { // Se não existir uma imagem
+                        img = document.createElement('img'); // Cria uma imagem
+                        img.className = 'preview-img'; // Adiciona a classe preview-img à imagem
+                        box.appendChild(img); // Adiciona a imagem ao box
+                    }
+                    img.src = e.target.result; // Define a imagem como resultado do leitor de arquivo
+                    img.style.display = 'block'; // Exibe a imagem
+                    
+                    uploadedImages.push(e.target.result); // Adiciona a imagem ao array de imagens
+                }
+                reader.readAsDataURL(file); // Lê o arquivo como URL de dados
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = JSON.parse(localStorage.getItem('biowind_session') || 'null');
+            if (!session) {
+                window.location.href = 'register.html';
+                return;
+            }
+            const profileName = document.getElementById('header-user-name');
+            if (profileName) {
+                profileName.textContent = session.nome;
+                profileName.style.display = 'inline-block';
+            }
+        });
+    </script>
 </body>
+
 </html>
