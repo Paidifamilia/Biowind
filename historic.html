@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioWind - Logística de Resíduos</title>
+    <!-- Importação de Ícones (FontAwesome) para as logos de cada bloco -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="historic-page">
+
+    <!-- Cabeçalho / Menu Navegador Fixo -->
+    <header class="navbar">
+        <div class="brand">
+            <h1>BioWind</h1>
+            <span>Logística de Resíduos</span>
+        </div>
+        <div class="nav-actions">
+            <!-- Botão de voltar ao início -->
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Voltar ao início
+            </a>
+            <!-- Botão de perfil/cadastro igual ao index.html -->
+            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="historic-purchase-main">
+        <h2 class="historic-main-title">Histórico de Compras</h2>
+        
+        <div class="historic-slider-container">
+            <!-- View 1: Carrinho atual / Para confirmar -->
+            <div class="historic-view" id="view1">
+                <div class="historic-group">
+                    <div class="group-title-pill">TODOS OS PRODUTOS</div>
+                    
+                    <div id="cart-container">
+                        <!-- Carrinho dinâmico -->
+                    </div>
+                </div>
+
+                <div class="confirm-action-row">
+                    <button class="btn-confirm-purchase" onclick="showView2()">Confirmar Compra</button>
+                </div>
+            </div>
+
+            <!-- View 2: Histórico Finalizado (Slider Direita) -->
+            <div class="historic-view hidden-view" id="view2">
+                <h3 class="month-title">HISTÓRICO</h3>
+                
+                <div id="history-container">
+                    <!-- Histórico dinâmico -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Função para renderizar o carrinho
+        function renderCart() { // Renderiza o carrinho
+            const cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Pega os itens do carrinho do localStorage
+            const container = document.getElementById('cart-container'); // Seleciona a área de carrinho
+            container.innerHTML = ''; // Limpa o carrinho
+
+            if (cart.length === 0) { // Se o carrinho estiver vazio
+                container.innerHTML = '<p style="text-align:center; padding: 20px;">Seu carrinho está vazio.</p>'; // Mostra um alerta informando que o carrinho está vazio
+                return; // Retorna da função
+            }
+
+            cart.forEach((item, index) => { // Para cada item no carrinho
+                const totalFrete = "GRÁTIS"; // Total de frete grátis
+                const tipoDisplay = item.materialType === 'madeira' ? 'MADEIRA' : (item.materialType === 'papel' ? 'PAPEL' : 'ORGÂNICO'); // Tipo de material
+                // Cria o card do produto
+                container.innerHTML += `
+                    <div class="product-item-card">
+                        <img src="${item.imagem}" alt="${tipoDisplay}" class="product-img">
+                        <div class="product-info-col">
+                            <div class="product-name-line">${item.nome.toUpperCase()}</div>
+                            <div class="product-type">${tipoDisplay}</div>
+                            <div class="product-qty-pill">
+                                <span style="cursor:pointer;" onclick="changeQty(${index}, -1)">-</span>
+                                <span>${item.quantidade}</span>
+                                <span style="cursor:pointer;" onclick="changeQty(${index}, 1)">+</span>
+                            </div>
+                        </div>
+                        <div class="product-price-col">
+                            <div class="price-val">R$ ${item.preco * item.quantidade},00</div>
+                            <div class="shipping-val">TOTAL DE FRETE ${totalFrete}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        // Função para renderizar o histórico
+        function renderHistory() { // Renderiza o histórico
+            const history = JSON.parse(localStorage.getItem('biowind_history')) || []; // Pega o histórico do localStorage
+            const container = document.getElementById('history-container'); // Seleciona a área de histórico
+            if(!container) return; // Retorna da função se o container não existir
+            
+            container.innerHTML = ''; // Limpa o histórico
+            if (history.length === 0) { // Se o histórico estiver vazio
+                container.innerHTML = '<p style="text-align:center; padding: 20px;">Nenhuma compra confirmada ainda.</p>'; // Mostra um alerta informando que o histórico está vazio
+                return; // Retorna da função
+            }
+
+            history.forEach(item => { // Para cada item no histórico
+                const tipoDisplay = item.materialType === 'madeira' ? 'MADEIRA' : (item.materialType === 'papel' ? 'PAPEL' : 'ORGÂNICO'); // Tipo de material
+                const dataStr = item.data || new Date().toLocaleDateString(); // Data do produto
+                const code = item.id; // Código do produto
+                // Cria o card do histórico
+                container.innerHTML += `
+                <div class="history-item-card">
+                    <div class="history-header-line">${dataStr} | CÓDIGO DO PRODUTO: ${code} | QUANTIDADE: ${item.quantidade}</div>
+                    <div class="history-body">
+                        <img src="${item.imagem}" alt="${tipoDisplay}" class="history-img">
+                        <div class="history-info">
+                            <div class="history-product-name">${item.nome.toUpperCase()} (${tipoDisplay})</div>
+                            <div class="history-status">ENTREGA PENDENTE</div>
+                            <div class="history-return-info">DEVOLUÇÃO E TROCA EM ATÉ 7 DIAS</div>
+                        </div>
+                    </div>
+                    <div class="history-footer">
+                        <div class="history-company">
+                            <span class="company-name">VENDEDOR INDEPENDENTE</span>
+                            <a href="#" class="company-message">ENVIAR MENSAGEM</a>
+                        </div>
+                        <div class="history-actions">
+                            <button class="btn-ver-compra">VER COMPRA</button>
+                            <button class="btn-comprar-novamente" onclick="window.location.href='index.html'">COMPRAR NOVAMENTE</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }
+        // Função para mudar a quantidade do item no carrinho
+        function changeQty(index, delta) { //Index é o índice do item no carrinho e delta é a quantidade a ser adicionada ou removida
+            let cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Pega os itens do carrinho do localStorage
+            if(cart[index]) { // Se o item existir
+                cart[index].quantidade += delta; // Adiciona 1 ao item
+                if(cart[index].quantidade <= 0) { // Se o item não existir
+                    cart.splice(index, 1); // Remove o item do carrinho
+                }
+                localStorage.setItem('biowind_cart', JSON.stringify(cart)); // Salva os itens do carrinho no localStorage
+                renderCart(); // Renderiza o carrinho
+            }
+        }
+        // Função para mostrar a view 2
+        function showView2() { // Mostra a view 2
+            let cart = JSON.parse(localStorage.getItem('biowind_cart')) || []; // Pega os itens do carrinho do localStorage
+            if(cart.length === 0) { // Se o carrinho estiver vazio
+                alert("O carrinho está vazio."); // Mostra um alerta informando que o carrinho está vazio
+                return; // Retorna da função
+            }
+            
+            let history = JSON.parse(localStorage.getItem('biowind_history')) || []; // Pega o histórico do localStorage
+            
+            // For history, we can aggregate if same item bought again, or just add as new purchase
+            // The request says: "caso o produto for igual ao clicar em comprar, eu quero que no bloco do historic conte quantas vezes o usuário comprou o mesmo produto."
+            // This is already handled by the cart quantity aggregation. When we push to history, we can either merge quantities or just add the cart snapshot. Let's merge if it's the exact same item ID.
+            cart.forEach(cartItem => {
+                let existing = history.find(h => h.id === cartItem.id);
+                if(existing) { // Se o item existir
+                    existing.quantidade += cartItem.quantidade; // Adiciona 1 ao item
+                } else { // Se o item não existir
+                    history.push(cartItem); // Adiciona o item ao carrinho
+                }
+            });
+
+            localStorage.setItem('biowind_history', JSON.stringify(history)); // Salva o histórico no localStorage
+            
+            localStorage.removeItem('biowind_cart'); // Remove os itens do carrinho
+            renderHistory(); // Renderiza o histórico
+
+            const v1 = document.getElementById('view1'); // Pega a view 1
+            const v2 = document.getElementById('view2'); // Pega a view 2
+            
+            // Slider transition
+            v1.style.transform = 'translateX(-100%)'; // Move a view 1 para a esquerda
+            v1.style.opacity = '0'; // Remove a opacidade da view 1
+            
+            setTimeout(() => {
+                v1.style.display = 'none'; // Remove a view 1
+                v2.classList.remove('hidden-view'); // Remove a classe hidden-view da view 2
+                // Force reflow
+                void v2.offsetWidth; // Força o reflow
+                v2.style.transform = 'translateX(0)'; // Move a view 2 para a direita
+                v2.style.opacity = '1'; // Adiciona a opacidade da view 2
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { // Renderiza o carrinho e o histórico quando a página for carregada
+            renderCart(); // Renderiza o carrinho
+            renderHistory(); // Renderiza o histórico
+        });
+    </script>
+</body>
+</html>
