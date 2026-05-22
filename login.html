@@ -17,38 +17,26 @@
             <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Voltar</a>
         </div>
         <div class="nav-right">
-            <i class="fas fa-user-circle profile-btn" style="color: white; font-size: 2.5rem;"></i>
+            <a href="login.html" class="profile-btn" aria-label="Acessar Cadastro">
+                <i class="fas fa-user-circle"></i>
+            </a>
         </div>
     </header>
 
     <main class="login-main">
         <!-- TELA 1: Form de Login -->
         <div id="login-screen-1" class="login-card active">
-            <h2 class="login-title">EM QUAL PERFIL VAI LOGAR?</h2>
-            
-            <div class="login-input-pill toggle-group">
-                <label>
-                    <input type="radio" name="perfil" value="comprador" checked>
-                    <span>°COMPRADOR</span>
-                </label>
-                <span class="separator">/</span>
-                <label>
-                    <input type="radio" name="perfil" value="vendedor">
-                    <span>°VENDEDOR</span>
-                </label>
-            </div>
-
             <div class="login-field">
                 <label class="field-label">E-MAIL</label>
                 <div class="login-input-pill">
-                    <input type="email" name="email" placeholder="Digite seu e-mail" required>
+                    <input type="email" id="input-email" name="email" placeholder="Digite seu e-mail" required>
                 </div>
             </div>
 
             <div class="login-field">
                 <label class="field-label">SENHA</label>
                 <div class="login-input-pill">
-                    <input type="password" name="senha" placeholder="Digite sua senha" required>
+                    <input type="password" id="input-senha" name="senha" placeholder="Digite sua senha" required>
                 </div>
             </div>
 
@@ -56,7 +44,7 @@
 
             <div class="action-buttons">
                 <a href="register.html" class="btn-cadastrar">CADASTRAR</a>
-                <button type="button" class="btn-entrar" onclick="showSuccess()">ENTRAR</button>
+                <button type="button" class="btn-entrar" onclick="loginUser()">ENTRAR</button>
             </div>
         </div>
 
@@ -71,6 +59,43 @@
     </main>
 
     <script>
+        function getStoredUsers() {
+            return JSON.parse(localStorage.getItem('biowind_users') || '[]');
+        }
+
+        function saveStoredUsers(users) {
+            localStorage.setItem('biowind_users', JSON.stringify(users));
+        }
+
+        function createSession(user) {
+            const session = {
+                id: user.id,
+                email: user.email,
+                nome: user.nomeCompleto || user.nome || user.email
+            };
+            localStorage.setItem('biowind_session', JSON.stringify(session));
+        }
+
+        function loginUser() {
+            const email = document.getElementById('input-email').value.trim().toLowerCase();
+            const senha = document.getElementById('input-senha').value;
+            const users = getStoredUsers();
+
+            if (!email || !senha) {
+                alert('Por favor, preencha email e senha.');
+                return;
+            }
+
+            const user = users.find(u => u.email === email && u.senha === senha);
+            if (!user) {
+                alert('Email ou senha incorretos.');
+                return;
+            }
+
+            createSession(user);
+            showSuccess();
+        }
+
         function showSuccess() {
             // Oculta tela 1
             const screen1 = document.getElementById('login-screen-1');
@@ -84,7 +109,7 @@
             
             // Redireciona após 2 segundos
             setTimeout(() => {
-                window.location.href = 'Index.html';
+                window.location.href = 'index.html';
             }, 2000);
         }
     </script>
