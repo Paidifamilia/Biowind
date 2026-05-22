@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="register-body">
 
     <!-- Cabeçalho idêntico (NavBar sem Links ao Lado Direito Exatamente Feito) -->
@@ -22,102 +24,175 @@
         <div class="form-wrapper">
             <h2 class="form-title">CADASTRO</h2>
             <form id="registroForm" action="#" method="get">
-                
+                <!-- O método GET é usado para enviar dados para o servidor -->
+
                 <!-- Nome Completo (100% largura) -->
                 <div class="form-row">
                     <div class="input-pill w-100">
-                        <input type="text" placeholder="NOME COMPLETO" required>
+                        <input type="text" id="input-nome" placeholder="NOME COMPLETO" maxlength="70" required>
                     </div>
                 </div>
 
                 <!-- CNPJ e Nome Empresa -->
                 <div class="form-row">
                     <div class="input-pill w-40">
-                        <input type="text" placeholder="CNPJ" required>
+                        <input type="text" id="input-cnpj" placeholder="CNPJ" maxlength="14"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,14)" required>
                     </div>
                     <div class="input-pill w-60">
-                        <input type="text" placeholder="NOME DA EMPRESA" required>
+                        <input type="text" id="input-empresa" placeholder="NOME DA EMPRESA" maxlength="100" required>
                     </div>
                 </div>
 
                 <!-- Telefone e Email Corporativo -->
                 <div class="form-row">
                     <div class="input-pill w-40">
-                        <input type="tel" placeholder="TELEFONE" required>
+                        <input type="tel" id="input-telefone" placeholder="TELEFONE" maxlength="10"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" required>
                     </div>
                     <div class="input-pill w-60">
-                        <input type="email" placeholder="E-MAIL CORPORATIVO" required>
+                        <input type="email" id="input-email" placeholder="E-MAIL CORPORATIVO" maxlength="60" required>
                     </div>
                 </div>
 
-                <!-- Controle do Vendedor/Comprador Exatamente numa pílula -->
+                <!-- Senha -->
                 <div class="form-row">
-                    <div class="input-pill w-50">
-                        <div class="toggle-group">
-                            <span style="margin-right: 5px;">TIPO DE ATUAÇÃO: </span>
-                            <label>
-                                <input type="radio" name="tipo" value="vendedor" id="optVendedor">
-                                <span>VENDEDOR</span>
-                            </label>
-                            <span class="separator">/</span>
-                            <label>
-                                <input type="radio" name="tipo" value="comprador" id="optComprador" checked>
-                                <span>COMPRADOR</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Expansão Animada de Vendedor -->
-                <div class="vendedor-block" id="blocoVendedor">
-                    <h2 class="vendedor-title">VENDEDOR</h2>
-                    <div class="form-row">
-                        <div class="input-pill w-100">
-                            <input type="text" placeholder="INSCRIÇÃO ESTADUAL">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-pill w-100">
-                            <input type="text" placeholder="SETOR DE ATIVIDADE">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-pill w-100">
-                            <input type="text" placeholder="RESPONSAVEL TECNICO">
-                        </div>
+                    <div class="input-pill w-100">
+                        <input type="password" id="input-senha" placeholder="SENHA" maxlength="20" required>
                     </div>
                 </div>
 
                 <!-- Botão Concluir com cápsula escura estilo Imagem -->
                 <div class="action-row">
-                    <button type="button" class="btn-submit" onclick="window.location.href='index.html'">CONCLUIR</button>
+                    <button type="button" class="btn-submit" onclick="registerUser()">CONCLUIR</button>
                 </div>
             </form>
         </div>
     </main>
 
-    <!-- Script focado somente em ativar a transição suave -->
     <script>
-        const radioVendedor = document.getElementById('optVendedor');
-        const radioComprador = document.getElementById('optComprador');
-        const blocoVendedor = document.getElementById('blocoVendedor');
+        function getStoredUsers() {
+            return JSON.parse(localStorage.getItem('biowind_users') || '[]');
+        }
 
-        function toggleAnimation() {
-            if (radioVendedor.checked) {
-                blocoVendedor.classList.add('active');
-                // Defino uma altura maior dinamicamente para comportar o expansivo fludar devagar e nunca cortar 
-                blocoVendedor.style.maxHeight = blocoVendedor.scrollHeight + 80 + "px"; 
-            } else {
-                blocoVendedor.classList.remove('active');
-                blocoVendedor.style.maxHeight = "0";
+        function saveStoredUsers(users) {
+            localStorage.setItem('biowind_users', JSON.stringify(users));
+        }
+
+        function addUserToLocalStorage(user) {
+            const users = getStoredUsers();
+            if (!users.some(u => u.email && u.email.toLowerCase() === user.email.toLowerCase())) {
+                users.push(user);
+                saveStoredUsers(users);
             }
         }
 
-        radioVendedor.addEventListener('change', toggleAnimation);
-        radioComprador.addEventListener('change', toggleAnimation);
+        function createSession(user) {
+            const session = {
+                id: user.id,
+                email: user.email,
+                nome: user.nomeCompleto || user.nome || 'Usuário'
+            };
+            localStorage.setItem('biowind_session', JSON.stringify(session));
+        }
 
-        // Executar uma vez pra garantir os estados dos botões no Reset da página
-        document.addEventListener('DOMContentLoaded', toggleAnimation);
+        // Transformamos a função em ASYNC para permitir o uso de await no fetch
+        async function registerUser() {
+            const nome = document.getElementById('input-nome').value.trim();
+            const cnpj = document.getElementById('input-cnpj').value.trim();
+            const empresa = document.getElementById('input-empresa').value.trim();
+            const telefone = document.getElementById('input-telefone').value.trim();
+            const email = document.getElementById('input-email').value.trim().toLowerCase();
+            const senha = document.getElementById('input-senha').value;
+
+            // 1. Validações de campos vazios e formatos
+            if (!nome || !cnpj || !empresa || !telefone || !email || !senha) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            if (nome.length > 70) {
+                alert('O nome completo deve ter no máximo 70 caracteres.');
+                return;
+            }
+
+            if (empresa.length > 100) {
+                alert('O nome da empresa deve ter no máximo 100 caracteres.');
+                return;
+            }
+
+            if (!/^\d{14}$/.test(cnpj)) {
+                alert('O CNPJ deve conter exatamente 14 dígitos numéricos.');
+                return;
+            }
+
+            if (!/^\d{10}$/.test(telefone)) {
+                alert('O telefone deve conter exatamente 10 dígitos numéricos.');
+                return;
+            }
+
+            if (email.length > 60 || !email.includes('@')) {
+                alert('O e-mail corporativo é obrigatório e deve conter @, com no máximo 60 caracteres.');
+                return;
+            }
+
+            if (senha.length > 20) {
+                alert('A senha deve ter no máximo 20 caracteres.');
+                return;
+            }
+
+            const storedUsers = getStoredUsers();
+            if (storedUsers.some(u => u.email && u.email.toLowerCase() === email)) {
+                alert('Este e-mail já está cadastrado. Faça login ou use outro e-mail.');
+                return;
+            }
+
+            // 2. Estrutura de dados idêntica ao que configuramos no seu MockAPI
+            const dados = {
+                nomeCompleto: nome,
+                cnpj,
+                tel: telefone,
+                senha,
+                nomeEmpresa: empresa,
+                email
+            };
+
+            console.log("Enviando dados para o MockAPI:", dados);
+
+            try {
+                // Requisição HTTP POST salvando direto na nuvem do MockAPI
+                const response = await fetch('https://6a10aa60d2a9857070370707.mockapi.io/api/v1/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status}`);
+                }
+
+                const usuarioCriado = await response.json();
+                addUserToLocalStorage(usuarioCriado);
+                alert('Cadastro enviado com sucesso!');
+
+                // 3. Mantém a lógica original do seu app (Sessão local e Redirecionamento)
+                createSession(usuarioCriado);
+                window.location.href = 'index.html';
+
+            } catch (error) {
+                alert('Erro ao enviar cadastro para o servidor: ' + error.message);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = localStorage.getItem('biowind_session');
+            if (session) {
+                window.location.href = 'index.html';
+            }
+        });
     </script>
 </body>
+
 </html>
