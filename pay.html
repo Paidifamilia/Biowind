@@ -21,8 +21,9 @@
             <a href="index.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Voltar ao início
             </a>
+            <span id="header-user-name" class="profile-name" style="display:none;"></span>
             <!-- Botão de perfil/cadastro igual ao index.html -->
-            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro" style="color: #c89116; font-size: 32px; text-decoration: none; display: flex; align-items: center;">
+            <a href="login.html" class="profile-btn" aria-label="Acessar Cadastro">
                 <i class="fas fa-user-circle"></i>
             </a>
         </div>
@@ -59,5 +60,19 @@
         </div>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = JSON.parse(localStorage.getItem('biowind_session') || 'null');
+            if (!session) {
+                window.location.href = 'register.html';
+                return;
+            }
+            const profileName = document.getElementById('header-user-name');
+            if (profileName) {
+                profileName.textContent = session.nome;
+                profileName.style.display = 'inline-block';
+            }
+        });
+    </script>
 </body>
 </html>
