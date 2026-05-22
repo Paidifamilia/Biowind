@@ -17,8 +17,8 @@
             <span>Logística de Resíduos</span>
         </div>
         <div class="profile-area">
-            <!-- Botão que cai para a tela de cadastro, com a logo de perfil sem cadastro -->
-            <a href="register.html" class="profile-btn" aria-label="Acessar Cadastro">
+            <span id="header-user-name" class="profile-name" style="display: none;"></span>
+            <a href="login.html" class="profile-btn" aria-label="Acessar Cadastro">
                 <i class="fas fa-user-circle"></i>
             </a>
         </div>
@@ -60,18 +60,38 @@
     <!-- Sem Rodapé conforme solicitado -->
 
     <script>
-        // Logica para o Slider com seta apontada para direita
-        const track = document.getElementById('sliderTrack');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentSlide = 0;
-        const totalSlides = document.querySelectorAll('.slide').length;
+        function getSession() {
+            return JSON.parse(localStorage.getItem('biowind_session') || 'null');
+        }
 
-        nextBtn.addEventListener('click', () => {
-            currentSlide++;
-            if (currentSlide >= totalSlides) {
-                currentSlide = 0; // Volta ao início
+        function setHeaderUserName() {
+            const session = getSession();
+            const userNameElement = document.getElementById('header-user-name');
+            if (session && userNameElement) {
+                userNameElement.textContent = session.nome;
+                userNameElement.style.display = 'inline-block';
             }
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function blockUnauthorizedLinks() {
+            const advertLink = document.querySelector('a[href="adv.html"]');
+            const payLink = document.querySelector('a[href="pay.html"]');
+            const session = getSession();
+            if (!session) {
+                [advertLink, payLink].forEach(link => {
+                    if (link) {
+                        link.addEventListener('click', event => {
+                            event.preventDefault();
+                            window.location.href = 'register.html';
+                        });
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setHeaderUserName();
+            blockUnauthorizedLinks();
         });
     </script>
 </body>
